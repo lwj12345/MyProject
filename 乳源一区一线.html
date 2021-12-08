@@ -1,0 +1,240 @@
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>乳源一区一线物流路线分布</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<script src="https://mapopen.bj.bcebos.com/github/BMapGLLib/TrackAnimation/src/TrackAnimation.min.js"></script>
+    <script src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=duaE7gEWkw9LUCnkX1GDf4jo2nGyL84H"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
+	<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/data/points-sample-data.js"></script>
+	<link rel="stylesheet" href="index.css">
+</head>
+<body>
+	<div class="main">
+		<div class="header">
+			<div class="title">
+			  <span>运输路线情况</span>
+			</div>
+		  </div>
+		<div class="footer">
+			<div class="left">
+				<div class="bmap" id="container"></div>
+			</div>	
+			<div class="right">
+				<div class="word">
+					<ul>
+						<!-- <li><a href="乳源一区一线.html">乳源一区一线</a></li> -->
+						<!-- <li><a href="乳源一区二线.html">乳源一区二线</a></li>
+						<li><a href="乳源一区三线.html">乳源一区三线</a></li>
+						<li><a href="乳源一区四线.html">乳源一区四线</a></li>
+						<li><a href="乳源一区五线.html">乳源一区五线</a></li> -->
+						<li><a href="乳源二区一线.html">乳源二区一线</a></li>
+						<li><a href="乳源二区二线.html">乳源二区二线</a></li>
+						<li><a href="乳源二区三线.html">乳源二区三线</a></li>
+						<li><a href="乳源二区四线.html">乳源二区四线</a></li>
+						<li><a href="乳源二区五线.html">乳源二区五线</a></li>
+					</ul>	
+				</div>
+				<div class="address">
+					<form>
+						<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+						<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+						<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+						<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+						<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+						<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+						<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+						<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+						<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+						<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+						</form>
+					<button id="btn" onclick="threeFn()">生成路线</button>
+				</div>
+			</div>
+		</div>	
+	</div>
+</body>
+</html>
+<script src="http://www.w3school.com.cn/jquery/jquery.js" type="text/javascript"></script> 
+<script type="text/javascript">
+	// var btn = document.getElementById("btn");
+	// btn.addEventListener('click', function(){
+    //         alert("这是第二中点击方式");
+    //     })
+	
+</script>
+
+<script type="text/javascript">
+var map = new BMapGL.Map('container');
+map.centerAndZoom(new BMapGL.Point(113.15184209083547,24.993933450187996), 13);
+map.enableScrollWheelZoom(true);
+var scaleCtrl = new BMapGL.ScaleControl();  // 添加比例尺控件
+map.addControl(scaleCtrl);
+var zoomCtrl = new BMapGL.ZoomControl();  // 添加比例尺控件
+map.addControl(zoomCtrl);
+$(function () {
+				$.ajax({
+					url:'https://hcguang.cn/region/load/getOneWithOne',
+					methods:'get',
+					success:function (res) {
+						//var copy = res;
+						//console.log(res.data)
+						var aac = res.data.list;
+						console.log(aac);
+						 //绘制点    
+						for (var i = 0; i <= aac.length; i++) {  
+							//var p0 = aac[i].p1;  
+                            var p3 = parseFloat(aac[i].p1)+ 0.0116;
+							//var p1 = aac[i].p2;  
+                            var p4 = parseFloat(aac[i].p2)+0.0033;
+							var maker = addMarker(new window.BMapGL.Point(p3, p4), i);  
+							addInfoWindow(maker, aac[i], i);   
+						}  
+					},
+					error:function (err) {
+						console.log(err); 
+					}
+				})
+			})
+
+		 // 添加标注  
+	function addMarker(point, index) {   
+			var marker = new BMapGL.Marker(point);  
+			map.addOverlay(marker);  
+			return marker;  
+		}  
+
+		// 添加信息窗口  
+	function addInfoWindow(marker, poi) {  
+			//pop弹窗标题  
+			var title = '<div style="font-weight:bold;color:#CE5521;font-size:14px">' + poi.title + '</div>';  
+			//pop弹窗信息  
+			var html = [];  
+			html.push('<table cellspacing="0" style="table-layout:fixed;width:100%;font:12px arial,simsun,sans-serif"><tbody>');  
+			html.push('<tr>');  
+			html.push('<td style="vertical-align:top;line-height:16px;width:38px;white-space:nowrap;word-break:keep-all">地址:</td>');  
+			html.push('<td style="vertical-align:top;line-height:16px">' + poi.address + ' </td>');  
+			html.push('</tr>');  
+			html.push('<td style="vertical-align:top;line-height:16px;width:68px;white-space:nowrap;">客户编码：</td>');  
+			html.push('<td style="vertical-align:top;line-height:16px"><span style="margin-left: 20px;">' + poi.code + ' </span></td>');  
+			html.push('</tr>');  
+			html.push('</tbody></table>');  
+			var infoWindow = new BMapGL.InfoWindow(html.join(""), { title: title, width: 200 });  
+
+			var openInfoWinFun = function () {  
+				marker.openInfoWindow(infoWindow);  
+			};  
+			marker.addEventListener("click", openInfoWinFun);  
+			return openInfoWinFun;  
+		}  
+
+//乳源一区一线
+var path13 = [];
+    var point13 = [
+	{"lng":113.15184209083547,"lat":24.993933450187996},
+ {"lng":113.14686473688667,"lat":24.97578612784485},
+ {"lng":113.15137908116581,"lat":24.97409786716891},
+ {"lng":113.14245791006564,"lat":24.958256771190488},
+ {"lng":113.13852232787356,"lat":24.93609329518239},
+ {"lng":113.16653441288803,"lat":24.908436068333188},
+ {"lng":113.17475283452443,"lat":24.9047409257709},
+ {"lng":113.17058574749755,"lat":24.88721177814138},
+ {"lng":113.17313230068066,"lat":24.883515993167617},
+ {"lng":113.17753089254239,"lat":24.88214324455627},
+ {"lng":113.18250824649121,"lat":24.87306159600189},
+ {"lng":113.18198105332434,"lat":24.868907411111834},
+ {"lng":113.18394884442037,"lat":24.85549444958053},
+ {"lng":113.18467273184878,"lat":24.837854694468035},
+ {"lng":113.19737239638387,"lat":24.836248813013135},
+ {"lng":113.2001499432759,"lat":24.83094865330032},
+ {"lng":113.20343249869377,"lat":24.812050565017397},
+ {"lng":113.21833025020564,"lat":24.805827385883568},
+ {"lng":113.23120796761421,"lat":24.806979850299868},
+ {"lng":113.24989328306977,"lat":24.81896483791504},
+ {"lng":113.25663062054575,"lat":24.814798405729185},
+ {"lng":113.25663062054575,"lat":24.809542113077246},
+ {"lng":113.26705553423798,"lat":24.808726461255592},
+ {"lng":113.26973622633027,"lat":24.80446685801187},
+ {"lng":113.27268580515671,"lat":24.788935650745444},
+ {"lng":113.28017534489744,"lat":24.78743224726228},
+ {"lng":113.28633415565025,"lat":24.789722997340636},
+ {"lng":113.30549490021455,"lat":24.785002617111427},
+ {"lng":113.31393515872232,"lat":24.78217531226009},
+ {"lng":113.31956635036265,"lat":24.784335742837452},
+ {"lng":113.32298100912328,"lat":24.783159816986743},
+ {"lng":113.32624590214877,"lat":24.788929949772992},
+ {"lng":113.3300484146388,"lat":24.791235405002777},
+ {"lng":113.33818449750117,"lat":24.796099763389},
+ {"lng":113.35659437911525,"lat":24.802624108842245},
+ {"lng":113.38527779824476,"lat":24.82672678787355},
+ {"lng":113.39794976955322,"lat":24.8351841921514},
+  {"lng":113.38692966671401,"lat":24.840898487145314},
+ {"lng":113.39801997095005,"lat":24.835344958860578},
+ {"lng":113.40978441045755,"lat":24.830404539957023},
+ {"lng":113.41143539697957,"lat":24.836636934262046},
+ {"lng":113.41083503824429,"lat":24.83834907494969},
+ {"lng":113.42246698874017,"lat":24.847217580396922},
+ {"lng":113.4222793766354,"lat":24.847251820485283},
+ {"lng":113.41068494856039,"lat":24.838588772735058},
+ {"lng":113.40449374910288,"lat":24.8406090639907},
+ {"lng":113.40182965721507,"lat":24.837664221548078},
+ {"lng":113.39815245996152,"lat":24.837527250408005},
+ {"lng":113.39905299806435,"lat":24.84108845024124},
+ {"lng":113.39849016175005,"lat":24.850401867625116},
+ {"lng":113.40631090182816,"lat":24.859169165842665},
+ {"lng":113.41109521752624,"lat":24.87163541005928},
+ {"lng":113.42132883932749,"lat":24.92811349315077},
+ {"lng":113.43453383268277,"lat":24.956545225821635},
+  {"lng":113.4395719432253,"lat":24.95281089831552},
+ {"lng":113.44606231754437,"lat":24.950366689596024},
+ {"lng":113.43962838126286,"lat":24.952733713527106},
+ {"lng":113.43810455424882,"lat":24.94908024425128},
+ {"lng":113.43937441009386,"lat":24.95293953952083},
+ {"lng":113.43440786278883,"lat":24.956824439898117},
+  {"lng":113.42887604037708,"lat":24.93923243426161},
+ {"lng":113.42749438405016,"lat":24.937269405324543},
+ {"lng":113.4211323386379,"lat":24.936888515449823},
+ {"lng":113.42755864713514,"lat":24.937269405324543},
+ {"lng":113.42137043565255,"lat":24.92855026347038},
+ {"lng":113.41663802823686,"lat":24.894305400858464},
+ {"lng":113.42239898272376,"lat":24.89229238714534},
+ {"lng":113.41647542065054,"lat":24.8943265903},
+ {"lng":113.41359226576985,"lat":24.87609639681861},
+ {"lng":113.40395944898665,"lat":24.85801083800684},
+ {"lng":113.39834979616703,"lat":24.85004128577488},
+ {"lng":113.39785273832224,"lat":24.83546149323181},
+ {"lng":113.3879115814266,"lat":24.840451217715138},
+ {"lng":113.37889353195706,"lat":24.841941615448857},
+	];
+    for (var i = 0; i < path13.length; i++) {
+        point13.push(new BMapGL.Point(path13[i].lng, path13[i].lat));
+    }
+    var p9 = new BMapGL.Polyline(point13);
+    setTimeout('start()', 3000);
+    // function start () {
+        // trackAni = new BMapGLLib.TrackAnimation(map, p9, {
+        //     overallView: true,
+        //     tilt: 30,
+        //     duration: 20000,
+        //     delay: 300
+        // });
+        // trackAni.start();
+    // }
+	var btn = document.getElementById("btn");
+	btn.addEventListener('click', function start(){
+		trackAni = new BMapGLLib.TrackAnimation(map, p9, {
+            overallView: true,
+            tilt: 30,
+            duration: 20000,
+            delay: 300
+        });
+		p9 = p9
+        trackAni.start();
+        })
+		
+</script>

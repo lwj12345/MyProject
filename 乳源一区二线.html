@@ -1,0 +1,208 @@
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>乳源一区二线物流路线分布</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<script src="https://mapopen.bj.bcebos.com/github/BMapGLLib/TrackAnimation/src/TrackAnimation.min.js"></script>
+    <script src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=duaE7gEWkw9LUCnkX1GDf4jo2nGyL84H"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
+	<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/data/points-sample-data.js"></script>
+	<link rel="stylesheet" href="index.css">
+</head>
+<body>
+	<div class="main">
+		<div class="header">
+			<div class="title">
+			  <span>运输路线情况</span>
+			</div>
+		  </div>
+		<div class="footer">
+			<div class="left">
+				<div class="bmap" id="container"></div>
+			</div>
+			<div class="right">
+				<div class="word">
+					<ul>
+						<li><a href="乳源一区一线.html">乳源一区一线</a></li>
+						<li><a href="乳源一区二线.html">乳源一区二线</a></li>
+						<li><a href="乳源一区三线.html">乳源一区三线</a></li>
+						<li><a href="乳源一区四线.html">乳源一区四线</a></li>
+						<li><a href="乳源一区五线.html">乳源一区五线</a></li>
+						<li><a href="乳源二区一线.html">乳源二区一线</a></li>
+						<li><a href="乳源二区二线.html">乳源二区二线</a></li>
+						<li><a href="乳源二区三线.html">乳源二区三线</a></li>
+						<li><a href="乳源二区四线.html">乳源二区四线</a></li>
+						<li><a href="乳源二区五线.html">乳源二区五线</a></li>
+					</ul>	
+				</div>
+			</div>
+		</div>	
+	</div>
+</body>
+</html>
+<!-- <script type="text/javascript" src="js/jquery.js"></script> -->
+<script src="http://www.w3school.com.cn/jquery/jquery.js" type="text/javascript"></script> 
+<script>
+var map = new BMapGL.Map('container');
+map.centerAndZoom(new BMapGL.Point(113.29496250855344,24.79703966679339), 13);
+map.enableScrollWheelZoom(true);
+var scaleCtrl = new BMapGL.ScaleControl();  // 添加比例尺控件
+map.addControl(scaleCtrl);
+var zoomCtrl = new BMapGL.ZoomControl();  // 添加比例尺控件
+map.addControl(zoomCtrl);
+$(function () {
+				$.ajax({
+					url:'https://hcguang.cn/region/load/getTwoWithOne',
+					methods:'get',
+					success:function (res) {
+						//var copy = res;
+						//console.log(res.data)
+						var aac = res.data.list;
+						console.log(aac);
+						 //绘制点    
+						for (var i = 0; i < aac.length; i++) {  
+							//var p0 = aac[i].p1;  
+                            var p3 = parseFloat(aac[i].p1)+ 0.0116;
+							//var p1 = aac[i].p2;  
+                            var p4 = parseFloat(aac[i].p2)+0.0033;
+							var maker = addMarker(new window.BMapGL.Point(p3, p4), i);  
+							addInfoWindow(maker, aac[i], i);   
+						}  
+					},
+					error:function (err) {
+						console.log(err); 
+					}
+				})
+			})
+
+		 // 添加标注  
+	function addMarker(point, index) {   
+			var marker = new BMapGL.Marker(point);  
+			map.addOverlay(marker);  
+			return marker;  
+		}  
+
+		// 添加信息窗口  
+	function addInfoWindow(marker, poi) {  
+			//pop弹窗标题  
+			var title = '<div style="font-weight:bold;color:#CE5521;font-size:14px">' + poi.title + '</div>';  
+			//pop弹窗信息  
+			var html = [];  
+			html.push('<table cellspacing="0" style="table-layout:fixed;width:100%;font:12px arial,simsun,sans-serif"><tbody>');  
+			html.push('<tr>');  
+			html.push('<td style="vertical-align:top;line-height:16px;width:38px;white-space:nowrap;word-break:keep-all">地址:</td>');  
+			html.push('<td style="vertical-align:top;line-height:16px">' + poi.address + ' </td>');  
+			html.push('</tr>');  
+			html.push('<td style="vertical-align:top;line-height:16px;width:68px;white-space:nowrap;">客户编码：</td>');  
+			html.push('<td style="vertical-align:top;line-height:16px"><span style="margin-left: 20px;">' + poi.code + ' </span></td>');  
+			html.push('</tr>');  
+			html.push('</tbody></table>');  
+			var infoWindow = new BMapGL.InfoWindow(html.join(""), { title: title, width: 200 });  
+
+			var openInfoWinFun = function () {  
+				marker.openInfoWindow(infoWindow);  
+			};  
+			marker.addEventListener("click", openInfoWinFun);  
+			return openInfoWinFun;  
+		}  
+
+//乳源一区二线
+var path13 = [];
+    var point13 = [
+	{"lng":113.29496250855344,"lat":24.79703966679339},
+ {"lng":113.30396840974574,"lat":24.807544420586378},
+ {"lng":113.31997890075424,"lat":24.808457834904367},
+ {"lng":113.40078184756283,"lat":24.855945996237438},
+ {"lng":113.41404053542875,"lat":24.876716273099106},
+ {"lng":113.43417771231674,"lat":24.957008177606834},
+ {"lng":113.43744129521986,"lat":24.960269741794356},
+ {"lng":113.43749556127797,"lat":24.96478478400818},
+ {"lng":113.4394981985022,"lat":24.96922516213633},
+ {"lng":113.43316782829326,"lat":24.9807662929618},
+ {"lng":113.43262027765533,"lat":24.98195511214522},
+ {"lng":113.44093754695663,"lat":24.968297181319063},
+ {"lng":113.43749125657762,"lat":24.964798951167655},
+ {"lng":113.4369118569989,"lat":24.959675239255557},
+ {"lng":113.43367175477016,"lat":24.95752034300391},
+ {"lng":113.43406373456554,"lat":24.95725231693079},
+ {"lng":113.43418350616969,"lat":24.95688502098342},
+ {"lng":113.4313492109464,"lat":24.949629423834995},
+ {"lng":113.43452142364059,"lat":24.95014448835505},
+ {"lng":113.43714320673486,"lat":24.949906766539527},
+ {"lng":113.44039533398518,"lat":24.947121293925413},
+ {"lng":113.43713085030976,"lat":24.949941085985664},
+ {"lng":113.43487419472362,"lat":24.9501267800867},
+ {"lng":113.42905066882231,"lat":24.949466024731795},
+ {"lng":113.42643655275096,"lat":24.95399684660506},
+ {"lng":113.42480596549859,"lat":24.95465757737775},
+ {"lng":113.42239890812604,"lat":24.95501153881692},
+ {"lng":113.42089773256023,"lat":24.961241091723195},
+ {"lng":113.4138244113378,"lat":24.979791719464714},
+ {"lng":113.41265970615744,"lat":24.98528866884162},
+ {"lng":113.4132291175789,"lat":24.987058020285115},
+ {"lng":113.4126338238201,"lat":24.98927557107055},
+ {"lng":113.41390205834969,"lat":24.9963997690125},
+  {"lng":113.41286248770666,"lat":24.998394454248434},
+ {"lng":113.40577331813228,"lat":24.999086704365094},
+ {"lng":113.39716504079202,"lat":25.012123345001545},
+ {"lng":113.39608900612448,"lat":25.015584165013692},
+ {"lng":113.38773391341181,"lat":25.018122037004687},
+ {"lng":113.34627630954375,"lat":25.011191306091128},
+ {"lng":113.32938111675813,"lat":25.023450893839698},
+ {"lng":113.30857499971654,"lat":25.014185040575803},
+ {"lng":113.29730033545879,"lat":25.01962056554917},
+ {"lng":113.29345872274445,"lat":25.018120296073544},
+ {"lng":113.28925124215257,"lat":25.021454203065574},
+ {"lng":113.30845930572423,"lat":25.014119486844585},
+ {"lng":113.32711856747957,"lat":25.02395457322794},
+ {"lng":113.34687543286758,"lat":25.010952086058126},
+ {"lng":113.39187718180692,"lat":25.01712010612428},
+ {"lng":113.39579269515508,"lat":25.016326981619347},
+ {"lng":113.3984168926123,"lat":25.017087854464183},
+ {"lng":113.40330744241892,"lat":25.01616393681802},
+ {"lng":113.40348636497282,"lat":25.019316097511076},
+ {"lng":113.40482828412708,"lat":25.01964217842936},
+ {"lng":113.40706481605085,"lat":25.022794248820208},
+ {"lng":113.4057293769099,"lat":25.028607041944976},
+ {"lng":113.40176297406457,"lat":25.033830775063585},
+ {"lng":113.40572522788305,"lat":25.028666192663888},
+ {"lng":113.40668956707671,"lat":25.024384536993615},
+ {"lng":113.40826054078944,"lat":25.024384536993615},
+ {"lng":113.4083161504784,"lat":25.02425785833577},
+ {"lng":113.4098732217689,"lat":25.024523883364548},
+ {"lng":113.41024858716935,"lat":25.02416918319662},
+ {"lng":113.41318199826128,"lat":25.02647471576073},
+ {"lng":113.41393272906215,"lat":25.028944880624334},
+ {"lng":113.41888199137848,"lat":25.030084939758012},
+ {"lng":113.42275009243758,"lat":25.027625728798185},
+ {"lng":113.42459661950892,"lat":24.96807900644415},
+ {"lng":113.43443265475567,"lat":24.956704013662154},
+ {"lng":113.42950650620851,"lat":24.938962712775847},
+ {"lng":113.42060094290864,"lat":24.925636145610717},
+ {"lng":113.41375050960104,"lat":24.876898488804464},
+ {"lng":113.40141972964737,"lat":24.85648121251942},
+ {"lng":113.32789174547936,"lat":24.81125940172839},
+ {"lng":113.31989957328716,"lat":24.80854973085568},
+ {"lng":113.303230185572,"lat":24.80729909332705},
+ {"lng":113.29478131782597,"lat":24.796668159236894},
+	];
+    for (var i = 0; i < path13.length; i++) {
+        point13.push(new BMapGL.Point(path13[i].lng, path13[i].lat));
+    }
+    var p9 = new BMapGL.Polyline(point13);
+    setTimeout('start()', 3000);
+    function start () {
+        trackAni = new BMapGLLib.TrackAnimation(map, p9, {
+            overallView: true,
+            tilt: 30,
+            duration: 20000,
+            delay: 300
+        });
+        trackAni.start();
+    }
+</script>

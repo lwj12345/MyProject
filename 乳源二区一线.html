@@ -1,0 +1,197 @@
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>乳源乳源二区一线物流路线分布</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<script src="https://mapopen.bj.bcebos.com/github/BMapGLLib/TrackAnimation/src/TrackAnimation.min.js"></script>
+  
+    <script src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=duaE7gEWkw9LUCnkX1GDf4jo2nGyL84H"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
+	<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/data/points-sample-data.js"></script>
+	<link rel="stylesheet" href="index.css">
+</head>
+<body>
+	<div class="main">
+		<div class="header">
+			<div class="title">
+			  <span>运输路线情况</span>
+			</div>
+		  </div>
+		<div class="footer">
+			<div class="left">
+				<div class="bmap" id="container"></div>
+			</div>
+			<div class="right">
+				<div class="word">
+					<ul>
+						<!-- <li><a href="乳源一区一线.html">乳源一区一线</a></li>
+						<li><a href="乳源一区二线.html">乳源一区二线</a></li>
+						<li><a href="乳源一区三线.html">乳源一区三线</a></li>
+						<li><a href="乳源一区四线.html">乳源一区四线</a></li>
+						<li><a href="乳源一区五线.html">乳源一区五线</a></li> -->
+						<li><a href="乳源二区一线.html">乳源二区一线</a></li>
+						<li><a href="乳源二区二线.html">乳源二区二线</a></li>
+						<li><a href="乳源二区三线.html">乳源二区三线</a></li>
+						<li><a href="乳源二区四线.html">乳源二区四线</a></li>
+						<li><a href="乳源二区五线.html">乳源二区五线</a></li>
+					</ul>	
+				</div>
+				<div class="address">
+					<form>
+						<input type="checkbox" name="vehicle" value="Bike">石艺轩商行<br>
+						<input type="checkbox" name="vehicle" value="Bike">开源酒行
+						<br>
+						<input type="checkbox" name="vehicle" value="Bike">聚鑫商行
+						<br>
+						<input type="checkbox" name="vehicle" value="Bike">小宇综合商店
+						<br>
+						<input type="checkbox" name="vehicle" value="Bike">顺裕商行
+						<br>
+						<input type="checkbox" name="vehicle" value="Bike">兴安商店
+						<br>
+						<input type="checkbox" name="vehicle" value="Bike">锦文商店
+						<br>
+						<input type="checkbox" name="vehicle" value="Bike">客香米店
+						<br>
+						<input type="checkbox" name="vehicle" value="Bike">辉军日杂店
+						<br>
+						<input type="checkbox" name="vehicle" value="Bike">黄妹豆腐店
+						<br>
+						</form>
+					<button id="btn" onclick="threeFn()">生成路线</button>
+				</div>
+			</div>
+		</div>	
+	</div>
+</body>
+</html>
+<!-- <script type="text/javascript" src="js/jquery.js"></script> -->
+<script src="http://www.w3school.com.cn/jquery/jquery.js" type="text/javascript"></script> 
+<script>
+var map = new BMapGL.Map('container');
+map.centerAndZoom(new BMapGL.Point(113.27459315298383,24.780639217008684), 15);
+map.enableScrollWheelZoom(true);
+var scaleCtrl = new BMapGL.ScaleControl();  // 添加比例尺控件
+map.addControl(scaleCtrl);
+var zoomCtrl = new BMapGL.ZoomControl();  // 添加比例尺控件
+map.addControl(zoomCtrl);
+
+$(function () {
+				$.ajax({
+					url:'https://hcguang.cn/region/load/getOneWithTwo',
+					methods:'get',
+					success:function (res) {
+						//var copy = res;
+						//console.log(res.data)
+						var aac = res.data.list;
+						console.log(aac);
+						 //绘制点    
+						for (var i = 0; i <= aac.length; i++) {  
+							//var p0 = aac[i].p1;  
+                            var p3 = parseFloat(aac[i].p1)+ 0.0116;
+							//var p1 = aac[i].p2;  
+                            var p4 = parseFloat(aac[i].p2)+0.0033;
+							var maker = addMarker(new window.BMapGL.Point(p3, p4), i);  
+							addInfoWindow(maker, aac[i], i);   
+						}  
+					},
+					error:function (err) {
+						console.log(err); 
+					}
+				})
+			})
+
+		 // 添加标注  
+	function addMarker(point, index) {   
+			var marker = new BMapGL.Marker(point);  
+			map.addOverlay(marker);  
+			return marker;  
+		}  
+
+		// 添加信息窗口  
+	function addInfoWindow(marker, poi) {  
+			//pop弹窗标题  
+			var title = '<div style="font-weight:bold;color:#CE5521;font-size:14px">' + poi.title + '</div>';  
+			//pop弹窗信息  
+			var html = [];  
+			html.push('<table cellspacing="0" style="table-layout:fixed;width:100%;font:12px arial,simsun,sans-serif"><tbody>');  
+			html.push('<tr>');  
+			html.push('<td style="vertical-align:top;line-height:16px;width:38px;white-space:nowrap;word-break:keep-all">地址:</td>');  
+			html.push('<td style="vertical-align:top;line-height:16px">' + poi.address + ' </td>');  
+			html.push('</tr>');  
+			html.push('<td style="vertical-align:top;line-height:16px;width:68px;white-space:nowrap;">客户编码：</td>');  
+			html.push('<td style="vertical-align:top;line-height:16px"><span style="margin-left: 20px;">' + poi.code + ' </span></td>');  
+			html.push('</tr>');  
+			html.push('</tbody></table>');  
+			var infoWindow = new BMapGL.InfoWindow(html.join(""), { title: title, width: 200 });  
+
+			var openInfoWinFun = function () {  
+				marker.openInfoWindow(infoWindow);  
+			};  
+			marker.addEventListener("click", openInfoWinFun);  
+			return openInfoWinFun;  
+		}  
+
+//乳源二区一线
+var path13 = [];
+    var point13 = [
+	{"lng":113.27459315298383,"lat":24.780639217008684},
+ {"lng":113.27513500229615,"lat":24.782110346137046},
+ {"lng":113.27599055384192,"lat":24.78492236690555},
+ {"lng":113.2762022697606,"lat":24.785250751572864},
+ {"lng":113.27641478686525,"lat":24.78548695564071},
+ {"lng":113.27672894258517,"lat":24.78575690259009},
+ {"lng":113.27703847836801,"lat":24.785942490773312},
+ {"lng":113.28210256338022,"lat":24.788570608842992},
+ {"lng":113.28178122753654,"lat":24.78497256482848},
+ {"lng":113.28165990878553,"lat":24.784677197894496},
+ {"lng":113.28137683169987,"lat":24.784246453174745},
+ {"lng":113.28094547614074,"lat":24.783261888137876},
+ {"lng":113.28102078750003,"lat":24.783502163983357},
+ {"lng":113.2813287403781,"lat":24.784161131913635},
+ {"lng":113.2828203871313,"lat":24.785013391855816},
+ {"lng":113.28311871648194,"lat":24.785074894921625},
+ {"lng":113.28553973839531,"lat":24.784622422401743},
+ {"lng":113.28306246912142,"lat":24.785096234282864},
+ {"lng":113.28283186365942,"lat":24.785026054388414},
+ {"lng":113.28137990334321,"lat":24.784261870717526},
+ {"lng":113.28166175446341,"lat":24.784675154314087},
+ {"lng":113.28188381898238,"lat":24.786047557781423},
+ {"lng":113.28052580903956,"lat":24.786445240008785},
+ {"lng":113.28032936734972,"lat":24.785618683346694},
+ {"lng":113.28022687603328,"lat":24.78430085979553},
+ {"lng":113.27987669736878,"lat":24.78355226733357},
+ {"lng":113.27648970523359,"lat":24.78454489237715},
+ {"lng":113.27644700051839,"lat":24.784459116559766},
+ {"lng":113.2808874690666,"lat":24.783131545771457},
+ {"lng":113.28037501248447,"lat":24.78141599827556},
+ {"lng":113.27801771220636,"lat":24.782998981592613},
+ {"lng":113.27687818273967,"lat":24.78316113041184},
+ {"lng":113.27687818273967,"lat":24.78345707700934},
+ {"lng":113.27678284521804,"lat":24.784048968063317},
+ {"lng":113.27691080105181,"lat":24.784398740941374},
+ {"lng":113.27489657688828,"lat":24.785165500704757},
+ {"lng":113.2741893966859,"lat":24.78517590343849},
+	];
+    for (var i = 0; i < path13.length; i++) {
+        point13.push(new BMapGL.Point(path13[i].lng, path13[i].lat));
+    }
+    var p9 = new BMapGL.Polyline(point13);
+    setTimeout('start()', 3000);
+	var btn = document.getElementById("btn");
+	btn.addEventListener('click', function start(){
+		trackAni = new BMapGLLib.TrackAnimation(map, p9, {
+            overallView: true,
+            tilt: 30,
+            duration: 20000,
+            delay: 300
+        });
+		p9 = p9
+        trackAni.start();
+        })
+</script>

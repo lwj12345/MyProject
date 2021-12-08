@@ -1,0 +1,71 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+body, html {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	font-family: "微软雅黑";
+}
+
+#allmap {
+	height: 1000px;
+	width: 100%;
+}
+
+#control {
+	width: 100%;
+}
+</style>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=2.0&ak=duaE7gEWkw9LUCnkX1GDf4jo2nGyL84H"></script>
+<title>路线的生成</title>
+</head>
+<body>
+	<div id="allmap"></div>
+	<script type="text/javascript">
+			//1:直接画两段只会显示一段。
+            // 解决方案：
+            // setSearchCompleteCallback回调事件，可以显示两段了。
+            // 2:我们这样可以显示多段但是起点终点driver  search之后是不一样的。
+            // 解决方案：
+            // 嵌套。
+        var map = new BMap.Map("allmap");
+        var point = new BMap.Point(113.148468,24.985676);
+        map.centerAndZoom(point, 12);
+        map.enableScrollWheelZoom();
+		var myP1 = new BMap.Point(113.148468,24.985676);  //解放南路
+        var myP2 = new BMap.Point(113.300943,24.768724);  //文昌路
+        var myP3 = new BMap.Point(113.299631,24.778883);  //鹰峰东路南侧
+		var myP4 = new BMap.Point(113.148468,24.985676);
+		aa = ['113.148468,24.985676','113.300943,24.768724','113.299631,24.778883']
+		for(i=0;i<aa.length-1;i++){
+			 a = aa[i];
+			 b = aa[i+1]
+			console.log(a,b)
+		}
+		console.log(aa[0])
+
+        var p = [];  //折线点的集合,不能用数组传值？
+         var driver = new BMap.DrivingRoute(map);
+			driver.search(new BMap.Point(113.148468,24.985676),new BMap.Point(113.300943,24.768724)); 
+			driver.setSearchCompleteCallback(function () {
+				var pots = driver.getResults().getPlan(0).getRoute(0).getPath();
+				p = p.concat(pots);
+				driver.search(myP2, myP3);
+				//第一个嵌套
+				driver.setSearchCompleteCallback(function () {
+				var pots = driver.getResults().getPlan(0).getRoute(0).getPath();
+				p = p.concat(pots);
+				driver.search(myP3, myP4);
+				var polyline = new BMap.Polyline(p);
+				map.addOverlay(polyline);
+				var menu = new BMap.ContextMenu();
+				map.addContextMenu(menu);
+				});
+			})
+ </script>
+</body>
+</html>

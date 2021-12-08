@@ -1,0 +1,105 @@
+body{
+    margin: 0;
+}
+.main{
+    background-image: url("bg2.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.bmap {
+    height: 60vh;
+    border: 1px solid #000;
+  }
+  .header{
+    width: 100%;
+    height: 10%;
+    font-size: 30px;
+  }
+  .header .title {
+      float: left;
+      width: 96%;
+      height: 100%;
+      text-align: center;
+      font-size: 1.5rem;
+      display: table;
+      font-family: '汉仪铸字超然体';
+      letter-spacing: 0.2rem;
+      color: #96d2db;
+  }
+  .footer{
+    width: 100%;
+    height: 80%;
+    margin-top: 5%;
+    padding-left:6%;
+    box-sizing: border-box
+  }
+  .left{
+    width:63%;
+    height: 100%;
+    float: left;
+  }
+  .right{
+    margin-left: 30px;
+    width: 30%;
+    height: 75%;
+    float: left;
+}
+.right ul li{
+  list-style: none;
+  width: 187px;
+  font-size: 16px;
+  height: 61px;
+  margin-bottom: -6px;
+  background-image: url(logo.png);
+  background-size: 100%;
+  border-style: none;
+  background-repeat: no-repeat;
+    }
+.right ul li a{
+  color:#bbd9da;
+  text-decoration: none;
+  position: relative;
+  top: 10px;
+  left: 54px;
+} 
+.header .title span {
+  display: table-cell;
+    vertical-align: middle;
+}
+.word{
+  width: 50%;
+  height: 90%;
+  margin-left: -41px;
+  float: left;
+  margin-top: 26px;
+}
+.address{
+  width: 50%;
+  height: 130%;
+  float: right;
+  background-image: url(right2.png);
+  background-size: 100%;
+  border-style: none;
+  background-repeat: no-repeat;
+  margin-right: 11px;
+}
+form{
+  margin-top: 34px;
+  color:#bbd9da;
+  font-size: 15px;
+  margin-left: 14%;
+}
+form >input{
+  margin-top: 15px;
+}
+#btn{
+  cursor: pointer;
+  margin-left: 31%;
+  width: 45%;
+  height: 6%;
+  border-radius: 15px;
+  background-color: #bbd9da;
+}
