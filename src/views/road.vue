@@ -156,31 +156,50 @@ export default {
           };
           searchFn();
         }
-      
-        console.log(this.currentIndex)
          this.$axios.get("http://120.55.66.104:8009/region/route/getSevenRoute").then(res=>{ 
            var result = res.data.data.list[0]
            var result2 = res.data.data.list[1]
         var nav=document.getElementById('nav');
         var oNav=nav.getElementsByTagName('li');
         let that = this;
-        for(var i=0;i<oNav.length;i++){
-          oNav[i].index = i;
-          oNav[i].onclick = function(){
-          that.currentIndex = this.index
-          console.log(this.index)
+        // for(var i=0;i<oNav.length;i++){
+        //   that.array[i] = i
+        //   oNav[i].index = i;
+        //   oNav[i].onclick = function(){
+        //   that.currentIndex = this.index
+        //   console.log(this.index)
+        //   console.log(that.array[i])
+        //   }
+        // }
            if(result.status != 0){
-             console.log(23423)
-           }else{}
+             that.array = result
+             that.arrayList2 = result2
+               for(let i=0;i<that.array.length;i++){
+                  // that.array[i] = i
+                  oNav[i].index = i;
+                oNav[i].onclick = function(){
+                  that.currentIndex = this.index
+                  console.log(this.index)
+                  console.log(that.array[i].length)
+                  for(let j=0;j<that.array[i].length;j++){
+                  console.log(that.array[i][j].x)
+                   let p1 = that.array[i][j].x;
+                   let p2 = that.array[i][j].y;
+                   var point = new BMap.Point(p1,p2)
+                   that.listpoint.push(point)
+                  //  showPoly(that.listpoint)
+                  map.clearOverlays();
+                  } console.log(that.listpoint)
+                  showPoly(that.listpoint)
+                  that.listpoint = []
+                 
           }
+          // break
         }
-          //  if(result.status != 0){
-          //    that.array = result
-          //    that.arrayList2 = result2
           //     for(let i=0;i<that.array.length;i++){ //放到axios那里//七条线路
           //       //  console.log(this.array[i])
-          //         i=that.currentIndex
-          //         console.log(that)
+          //         i = 2
+          //         console.log(that.currentIndex)
           //        //遍历七条线路得到里面的经纬度
           //        for(let j=0;j<this.array[i].length;j++){
           //         //  i =5
@@ -191,12 +210,12 @@ export default {
           //        }    
           //        break
           // }
-          // showPoly(this.listpoint);
-          //    console.log(this.listpoint)
-          //       //  return this.listpoint;            
-          //  }else{
-          //    alert("获取数据失败")
-          //  }
+          
+             console.log(this.listpoint)
+                //  return this.listpoint;            
+           }else{
+             alert("获取数据失败")
+           }
           })
       }
     },

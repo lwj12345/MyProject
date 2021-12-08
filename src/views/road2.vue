@@ -47,7 +47,6 @@ export default {
  this.$axios.get("http://120.55.66.104:8009/region/route/getSevenRoute").then(res=>{ 
            var result = res.data.data.list[0]
            var result2 = res.data.data.list[1]
-       
            if(result.status != 0){
              this.array = result
              this.arrayList2 = result2
